@@ -20,7 +20,7 @@ const MonthSelector = ({ year, month, onMonthChange }: MonthSelectorProps) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
       <button onClick={handlePrevious}>&larr; Previous</button>
-      <h2 style={{ margin: 0 }}>{formatMonth(year, month)}</h2>
+      <h2 style={{ margin: 0, flex: 1, textAlign: 'center' }}>{formatMonth(year, month)}</h2>
       <button onClick={handleNext}>Next &rarr;</button>
     </div>
   );

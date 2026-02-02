@@ -10,6 +10,7 @@ function App() {
   const { year: currentYear, month: currentMonth } = getCurrentMonth();
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [capitalRatio] = useState(300); // 12 months * 25 (4% withdrawal rate)
 
   const { expenses, total, loading, error, addExpense, editExpense, removeExpense } = useExpenses();
 
@@ -37,6 +38,7 @@ function App() {
         <ExpenseList
           expenses={expenses}
           total={total}
+          capitalRatio={capitalRatio}
           onUpdate={editExpense}
           onDelete={removeExpense}
         />

@@ -4,11 +4,12 @@ import { EXPENSE_CATEGORIES } from '../types';
 
 interface ExpenseItemProps {
   expense: Expense;
+  capitalRatio: number;
   onUpdate: (id: number, input: UpdateExpenseInput) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 }
 
-const ExpenseItem = ({ expense, onUpdate, onDelete }: ExpenseItemProps) => {
+const ExpenseItem = ({ expense, capitalRatio, onUpdate, onDelete }: ExpenseItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [amount, setAmount] = useState(expense.amount.toString());
   const [description, setDescription] = useState(expense.description);
@@ -109,11 +110,16 @@ const ExpenseItem = ({ expense, onUpdate, onDelete }: ExpenseItemProps) => {
     );
   }
 
+  const capitalNeeded = expense.amount * capitalRatio;
+
   return (
     <div style={{ padding: '1rem', border: '1px solid #ddd', borderRadius: '4px', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div>
         <div><strong>${expense.amount.toFixed(2)}</strong> - {expense.description}</div>
         <div style={{ fontSize: '0.9em', color: '#666' }}>{expense.category}</div>
+        <div style={{ fontSize: '0.85em', color: '#2563eb', marginTop: '0.25rem' }}>
+          Capital Needed: ${capitalNeeded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
       </div>
       <div style={{ display: 'flex', gap: '0.5rem' }}>
         <button onClick={() => setIsEditing(true)} disabled={isLoading}>Edit</button>

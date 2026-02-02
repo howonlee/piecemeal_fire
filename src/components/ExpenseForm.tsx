@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react';
-import type { CreateExpenseInput } from '../types';
+import type { CreateExpenseInput, ExpenseCategory } from '../types';
+import { EXPENSE_CATEGORIES } from '../types';
 
 interface ExpenseFormProps {
   onAdd: (input: CreateExpenseInput) => Promise<void>;
@@ -8,7 +9,7 @@ interface ExpenseFormProps {
 const ExpenseForm = ({ onAdd }: ExpenseFormProps) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<ExpenseCategory>(EXPENSE_CATEGORIES[0]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,8 +28,8 @@ const ExpenseForm = ({ onAdd }: ExpenseFormProps) => {
       return;
     }
 
-    if (!category.trim()) {
-      setError('Please enter a category');
+    if (!category) {
+      setError('Please select a category');
       return;
     }
 
@@ -37,11 +38,11 @@ const ExpenseForm = ({ onAdd }: ExpenseFormProps) => {
       await onAdd({
         amount: amountNum,
         description: description.trim(),
-        category: category.trim(),
+        category,
       });
       setAmount('');
       setDescription('');
-      setCategory('');
+      setCategory(EXPENSE_CATEGORIES[0]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add expense');
     } finally {
@@ -81,15 +82,19 @@ const ExpenseForm = ({ onAdd }: ExpenseFormProps) => {
         </div>
         <div>
           <label htmlFor="category">Category: </label>
-          <input
+          <select
             id="category"
-            type="text"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder="e.g., Entertainment"
+            onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
             disabled={isSubmitting}
             required
-          />
+          >
+            {EXPENSE_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Adding...' : 'Add Expense'}

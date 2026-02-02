@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import type { Expense, UpdateExpenseInput } from '../types';
+import type { Expense, UpdateExpenseInput, ExpenseCategory } from '../types';
+import { EXPENSE_CATEGORIES } from '../types';
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -11,7 +12,7 @@ const ExpenseItem = ({ expense, onUpdate, onDelete }: ExpenseItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [amount, setAmount] = useState(expense.amount.toString());
   const [description, setDescription] = useState(expense.description);
-  const [category, setCategory] = useState(expense.category);
+  const [category, setCategory] = useState<ExpenseCategory>(expense.category);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
@@ -26,7 +27,7 @@ const ExpenseItem = ({ expense, onUpdate, onDelete }: ExpenseItemProps) => {
       await onUpdate(expense.id, {
         amount: amountNum,
         description: description.trim(),
-        category: category.trim(),
+        category,
       });
       setIsEditing(false);
     } catch (err) {
@@ -83,12 +84,17 @@ const ExpenseItem = ({ expense, onUpdate, onDelete }: ExpenseItemProps) => {
           </div>
           <div>
             <label>Category: </label>
-            <input
-              type="text"
+            <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
               disabled={isLoading}
-            />
+            >
+              {EXPENSE_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button onClick={handleSave} disabled={isLoading}>

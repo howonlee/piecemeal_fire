@@ -21,8 +21,8 @@ function App() {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h1>Monthly Expense Tracker</h1>
-      <p style={{ color: '#666', marginBottom: '2rem' }}>Track your recurring monthly expenses</p>
+      <h1>Piecemeal Capital Tracker</h1>
+      <p style={{ color: '#666', marginBottom: '2rem' }}>Track your recurring monthly expenses and figure out how much capital needed to deal with them</p>
 
       <MonthSelector
         year={selectedYear}
